@@ -20,22 +20,27 @@ public class PersonaController {
     }
 
     @GetMapping(value = "/")
-    public List<Persona> getPersonaList() {
-        return this.personaService.findAllPersonas();
+    public List<Persona> getAllPersona() {
+        return personaService.findAll();
     }
 
     @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void insertPersona(@RequestBody Persona persona) {
-        this.personaService.save(persona);
+    public Persona postPersona(@RequestBody Persona persona) {
+        return personaService.save(persona);
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Persona getPersonaById(@PathVariable("id") Long id) {
-        return this.personaService.findPersonaById(id);
+        return personaService.findOneById(id);
     }
 
-    @PutMapping(value = "/{uid}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void updatePersona(Persona persona) {
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Persona putPersona(@PathVariable("id") Long id, @RequestBody Persona persona) {
+        return personaService.replace(id, persona);
+    }
 
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void deletePersona(@PathVariable("id") Long id) {
+        personaService.delete(id);
     }
 }

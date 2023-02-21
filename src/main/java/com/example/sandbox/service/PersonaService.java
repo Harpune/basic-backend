@@ -18,17 +18,32 @@ public class PersonaService {
         this.personaRepository = personaRepository;
     }
 
-    public List<Persona> findAllPersonas() {
+    public List<Persona> findAll() {
         return personaRepository.findAll();
     }
 
-    public Persona findPersonaById(Long id) {
-        return this.personaRepository.findById(id)
+    public Persona findOneById(Long id) {
+        return personaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Persona with id ${id} not found"));
     }
 
-    public void save(Persona persona) {
-        personaRepository.save(persona);
+    public Persona save(Persona persona) {
+        return personaRepository.save(persona);
     }
 
+    public Persona replace(Long id, Persona newPersona) {
+        return personaRepository.findById(id)
+                .map(persona -> {
+                    persona.setFirstname(newPersona.getFirstname());
+                    persona.setLastname(newPersona.getLastname());
+                    persona.setDayOfBirth(newPersona.getDayOfBirth());
+                    persona.setEmail(newPersona.getEmail());
+                    return personaRepository.save(persona);
+                })
+                .orElseGet(() -> personaRepository.save(newPersona));
+    }
+
+    public void delete(Long id) {
+        personaRepository.deleteById(id);
+    }
 }
