@@ -1,46 +1,71 @@
 package com.example.sandbox.controller;
 
+import com.example.sandbox.dto.PersonaDTO;
+import com.example.sandbox.mapper.PersonaMapper;
 import com.example.sandbox.model.Persona;
 import com.example.sandbox.service.PersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
-@RequestMapping("/api/v1/persona")
+@RequestMapping("/api/v1/personas")
 public class PersonaController {
 
     private final PersonaService personaService;
+    private final PersonaMapper personaMapper;
 
     @Autowired
-    public PersonaController(PersonaService personaService) {
+    public PersonaController(PersonaService personaService, PersonaMapper personaMapper) {
         this.personaService = personaService;
+        this.personaMapper = personaMapper;
     }
 
-    @GetMapping(value = "/")
-    public List<Persona> getAllPersona() {
-        return personaService.findAll();
+    @GetMapping(value = "")
+    public CollectionModel<EntityModel<PersonaDTO>> all() {
+        List<EntityModel<PersonaDTO>> personas = personaService.findAll().stream()
+                .map(persona -> EntityModel.of(personaMapper.toDTO(persona),
+                        linkTo(methodOn(PersonaController.class).oneById(persona.getId())).withSelfRel(),
+                        linkTo(methodOn(PersonaController.class).all()).withRel("all")))
+                .toList();
+
+        return CollectionModel.of(personas, linkTo(methodOn(PersonaController.class).all()).withSelfRel());
     }
 
-    @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Persona postPersona(@RequestBody Persona persona) {
-        return personaService.save(persona);
+    @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public EntityModel<PersonaDTO> newPersona(@RequestBody PersonaDTO newPersona) {
+
+        Persona persona = personaService.save(personaMapper.toEntity(newPersona));
+        return EntityModel.of(personaMapper.toDTO(persona),
+                linkTo(methodOn(PersonaController.class).oneById(persona.getId())).withSelfRel(),
+                linkTo(methodOn(PersonaController.class).all()).withRel("all"));
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Persona getPersonaById(@PathVariable("id") Long id) {
-        return personaService.findOneById(id);
+    public EntityModel<PersonaDTO> oneById(@PathVariable("id") Long id) {
+        Persona persona = personaService.findOneById(id);
+        return EntityModel.of(personaMapper.toDTO(persona),
+                linkTo(methodOn(PersonaController.class).oneById(persona.getId())).withSelfRel(),
+                linkTo(methodOn(PersonaController.class).all()).withRel("all"));
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Persona putPersona(@PathVariable("id") Long id, @RequestBody Persona persona) {
-        return personaService.replace(id, persona);
+    public EntityModel<PersonaDTO> existingPersona(@PathVariable("id") Long id, @RequestBody PersonaDTO newPersona) {
+        Persona persona = personaService.replaceOneById(id, personaMapper.toEntity(newPersona));
+        return EntityModel.of(personaMapper.toDTO(persona),
+                linkTo(methodOn(PersonaController.class).oneById(persona.getId())).withSelfRel(),
+                linkTo(methodOn(PersonaController.class).all()).withRel("all"));
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public void deletePersona(@PathVariable("id") Long id) {
-        personaService.delete(id);
+        personaService.deleteOneById(id);
     }
 }

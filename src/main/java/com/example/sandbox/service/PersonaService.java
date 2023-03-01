@@ -1,8 +1,8 @@
 package com.example.sandbox.service;
 
+import com.example.sandbox.exception.PersonaNotFoundException;
 import com.example.sandbox.model.Persona;
 import com.example.sandbox.repository.PersonaRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +24,14 @@ public class PersonaService {
 
     public Persona findOneById(Long id) {
         return personaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Persona with id ${id} not found"));
+                .orElseThrow(() -> new PersonaNotFoundException(id));
     }
 
     public Persona save(Persona persona) {
         return personaRepository.save(persona);
     }
 
-    public Persona replace(Long id, Persona newPersona) {
+    public Persona replaceOneById(Long id, Persona newPersona) {
         return personaRepository.findById(id)
                 .map(persona -> {
                     persona.setFirstname(newPersona.getFirstname());
@@ -43,7 +43,7 @@ public class PersonaService {
                 .orElseGet(() -> personaRepository.save(newPersona));
     }
 
-    public void delete(Long id) {
+    public void deleteOneById(Long id) {
         personaRepository.deleteById(id);
     }
 }

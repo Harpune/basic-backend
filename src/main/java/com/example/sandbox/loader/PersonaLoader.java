@@ -14,9 +14,9 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class UserLoader implements ApplicationRunner {
+public class PersonaLoader implements ApplicationRunner {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserLoader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PersonaLoader.class);
 
     private final PersonaRepository personaRepository;
 
@@ -25,7 +25,7 @@ public class UserLoader implements ApplicationRunner {
             new Persona(2L, "Alice", "Seim",  LocalDate.of(1994, 12,9),"alicebseim@gmail.de"));
 
     @Autowired
-    public UserLoader(PersonaRepository personaRepository) {
+    public PersonaLoader(PersonaRepository personaRepository) {
         this.personaRepository = personaRepository;
     }
 
