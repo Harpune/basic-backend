@@ -1,7 +1,7 @@
 package com.example.sandbox.config;
 
 import com.example.sandbox.dto.ApiError;
-import com.example.sandbox.exception.PersonaNotFoundException;
+import com.example.sandbox.exception.ModelNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,8 +18,8 @@ import java.util.stream.Stream;
 public class GlobalExceptionHandler {
 
     @ResponseBody
-    @ExceptionHandler(PersonaNotFoundException.class)
-    public ResponseEntity<Object> handlePersonaNotFoundException(PersonaNotFoundException ex) {
+    @ExceptionHandler(ModelNotFoundException.class)
+    public ResponseEntity<Object> handlePersonaNotFoundException(ModelNotFoundException ex) {
         ApiError apiError = new ApiError(LocalDateTime.now(), HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value(), ex.getLocalizedMessage(), Collections.singletonList(ex.toString()));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
     }

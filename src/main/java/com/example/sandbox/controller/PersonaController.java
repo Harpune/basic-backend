@@ -7,6 +7,7 @@ import com.example.sandbox.service.PersonaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,10 +40,20 @@ public class PersonaController {
         return CollectionModel.of(personas, linkTo(methodOn(PersonaController.class).all()).withSelfRel());
     }
 
+    @GetMapping(value = "[{idArray}]")
+    public CollectionModel<EntityModel<PersonaDTO>> allById(@PathVariable Long[] idArray) {
+        List<EntityModel<PersonaDTO>> personas = personaService.findAllByID(List.of(idArray)).stream()
+                .map(persona -> EntityModel.of(personaMapper.toDTO(persona),
+                        linkTo(methodOn(PersonaController.class).oneById(persona.getId())).withSelfRel(),
+                        linkTo(methodOn(PersonaController.class).all()).withRel("all")))
+                .toList();
+        return CollectionModel.of(personas, linkTo(methodOn(PersonaController.class).all()).withSelfRel());
+    }
+
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public EntityModel<PersonaDTO> newPersona(@RequestBody PersonaDTO newPersona) {
 
-        Persona persona = personaService.save(personaMapper.toEntity(newPersona));
+        Persona persona = personaService.saveOne(personaMapper.toEntity(newPersona));
         return EntityModel.of(personaMapper.toDTO(persona),
                 linkTo(methodOn(PersonaController.class).oneById(persona.getId())).withSelfRel(),
                 linkTo(methodOn(PersonaController.class).all()).withRel("all"));
@@ -50,7 +61,7 @@ public class PersonaController {
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public EntityModel<PersonaDTO> oneById(@PathVariable("id") Long id) {
-        Persona persona = personaService.findOneById(id);
+        Persona persona = personaService.findOneByID(id);
         return EntityModel.of(personaMapper.toDTO(persona),
                 linkTo(methodOn(PersonaController.class).oneById(persona.getId())).withSelfRel(),
                 linkTo(methodOn(PersonaController.class).all()).withRel("all"));
@@ -58,7 +69,7 @@ public class PersonaController {
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public EntityModel<PersonaDTO> existingPersona(@PathVariable("id") Long id, @RequestBody PersonaDTO newPersona) {
-        Persona persona = personaService.replaceOneById(id, personaMapper.toEntity(newPersona));
+        Persona persona = personaService.updateOneByID(id, personaMapper.toEntity(newPersona));
         return EntityModel.of(personaMapper.toDTO(persona),
                 linkTo(methodOn(PersonaController.class).oneById(persona.getId())).withSelfRel(),
                 linkTo(methodOn(PersonaController.class).all()).withRel("all"));
@@ -66,6 +77,6 @@ public class PersonaController {
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public void deletePersona(@PathVariable("id") Long id) {
-        personaService.deleteOneById(id);
+        personaService.deleteOneByID(id);
     }
 }
