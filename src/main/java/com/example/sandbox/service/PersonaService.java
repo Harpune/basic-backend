@@ -56,8 +56,8 @@ public class PersonaService implements ModelService<Persona, Long> {
     }
 
     @Override
-    public List<Persona> updateAll(Map<Long, Persona> modelMap) {
-        return modelMap.entrySet().stream()
+    public List<Persona> updateAll(Map<Long, Persona> personaMap) {
+        return personaMap.entrySet().stream()
                 .map(entry -> updateOneByID(entry.getKey(), entry.getValue()))
                 .toList();
     }
@@ -65,5 +65,10 @@ public class PersonaService implements ModelService<Persona, Long> {
     @Override
     public void deleteOneByID(Long id) {
         personaRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAllByID(List<Long> idList) {
+        personaRepository.deleteAllById(idList);
     }
 }

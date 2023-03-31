@@ -12,5 +12,6 @@ public interface ModelService<M, I> {
     public M updateOneByID(I id, M model);
     public List<M> updateAll(Map<I,M> modelMap);
     public void deleteOneByID(I id);
+    public void deleteAllByID(List<I> idList);
 
 }

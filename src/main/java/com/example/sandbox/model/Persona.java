@@ -16,7 +16,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @Table(name = "PERSONA")
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Persona {
 
     @Id
