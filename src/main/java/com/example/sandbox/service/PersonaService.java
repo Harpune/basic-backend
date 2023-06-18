@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class PersonaService implements ModelService<Persona, Long> {
@@ -26,11 +27,15 @@ public class PersonaService implements ModelService<Persona, Long> {
 
     @Override
     public Persona findOneByID(Long id) {
-        return personaRepository.findById(id).orElseThrow(() -> new ModelNotFoundException(Persona.class, id));
+        if(id == null) {
+            throw new RuntimeException("ID must not be null");
+        }
+        return personaRepository.findById(id).orElseThrow(() -> new ModelNotFoundException(Persona.class, String.valueOf(id)));
     }
 
     @Override
     public List<Persona> findAllByID(List<Long> idList) {
+        idList.removeIf(Objects::isNull);
         return personaRepository.findAllById(idList);
     }
 
@@ -70,5 +75,13 @@ public class PersonaService implements ModelService<Persona, Long> {
     @Override
     public void deleteAllByID(List<Long> idList) {
         personaRepository.deleteAllById(idList);
+    }
+
+    public boolean exists(Long id) {
+        return personaRepository.existsById(id);
+    }
+
+    public Persona findPersonaByEmail(String email) {
+        return personaRepository.findPersonaByEmail(email);
     }
 }

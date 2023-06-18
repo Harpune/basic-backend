@@ -21,8 +21,8 @@ public class PersonaLoader implements ApplicationRunner {
     private final PersonaRepository personaRepository;
 
     private final List<Persona> personaList = Arrays.asList(
-            new Persona(1L, "Lukas", "Hennig",  LocalDate.of(1994, 1,25),"lukas.hennig@adesso.de"),
-            new Persona(2L, "Alice", "Seim",  LocalDate.of(1994, 12,9),"alicebseim@gmail.de"));
+            new Persona(1L, "lukas.hennig@gmx.de" ,"Hallo123!", "Lukas", "Hennig", LocalDate.of(1994, 1,25)),
+            new Persona(2L, "alicebseim@gmail.com", "Hallo123!", "Alice", "Seim",  LocalDate.of(1994, 12,9)));
 
     @Autowired
     public PersonaLoader(PersonaRepository personaRepository) {

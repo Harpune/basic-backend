@@ -1,4 +1,4 @@
-package com.example.sandbox.controller;
+package com.example.sandbox.controller.v1;
 
 import com.example.sandbox.dto.PersonaDTO;
 import com.example.sandbox.mapper.PersonaMapper;
@@ -67,7 +67,7 @@ public class PersonaController {
     }
 
     @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public EntityModel<PersonaDTO> existingPersona(@PathVariable("id") Long id, @RequestBody PersonaDTO newPersona) {
+    public EntityModel<PersonaDTO> updatePersona(@PathVariable("id") Long id, @RequestBody PersonaDTO newPersona) {
         Persona persona = personaService.updateOneByID(id, personaMapper.toEntity(newPersona));
         return EntityModel.of(personaMapper.toDTO(persona),
                 linkTo(methodOn(PersonaController.class).oneById(persona.getId())).withSelfRel(),

@@ -9,8 +9,8 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PersonaDTO {
     private final Long id;
+    private final String email;
     private final String firstname;
     private final String lastname;
     private final LocalDate dayOfBirth;
-    private final String email;
 }
