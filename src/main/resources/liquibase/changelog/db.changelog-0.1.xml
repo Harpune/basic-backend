@@ -11,7 +11,8 @@
                 <constraints nullable="false"/>
             </column>
             <column name="EMAIL" type="VARCHAR(50)"/>
-            <column name="PASSWORD" type="VARCHAR(50)"/>
+            <column name="PASSWORD" type="VARCHAR(255)"/>
+            <column name="ROLE" type="VARCHAR(10)" />
             <column name="FIRSTNAME" type="VARCHAR(30)"/>
             <column name="LASTNAME" type="VARCHAR(40)"/>
             <column name="DAY_OF_BIRTH" type="DATE"/>

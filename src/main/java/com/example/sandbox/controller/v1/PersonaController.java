@@ -3,7 +3,7 @@ package com.example.sandbox.controller.v1;
 import com.example.sandbox.dto.PersonaDTO;
 import com.example.sandbox.mapper.PersonaMapper;
 import com.example.sandbox.model.Persona;
-import com.example.sandbox.service.PersonaService;
+import com.example.sandbox.service.PersonaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -19,11 +19,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping("/api/v1/personas")
 public class PersonaController {
 
-    private final PersonaService personaService;
+    private final PersonaServiceImpl personaService;
     private final PersonaMapper personaMapper;
 
     @Autowired
-    public PersonaController(PersonaService personaService, PersonaMapper personaMapper) {
+    public PersonaController(PersonaServiceImpl personaService, PersonaMapper personaMapper) {
         this.personaService = personaService;
         this.personaMapper = personaMapper;
     }

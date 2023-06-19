@@ -1,7 +1,7 @@
 package com.example.sandbox.config;
 
 import com.example.sandbox.dto.ApiError;
-import com.example.sandbox.exception.ModelNotFoundException;
+import com.example.sandbox.model.exception.ModelNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

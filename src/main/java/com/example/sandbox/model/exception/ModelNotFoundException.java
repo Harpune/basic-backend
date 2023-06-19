@@ -1,4 +1,4 @@
-package com.example.sandbox.exception;
+package com.example.sandbox.model.exception;
 
 import org.springframework.lang.NonNull;
 

@@ -1,6 +1,7 @@
-package com.example.sandbox.loader;
+package com.example.sandbox.config;
 
 import com.example.sandbox.model.Persona;
+import com.example.sandbox.model.Role;
 import com.example.sandbox.repository.PersonaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -20,9 +22,15 @@ public class PersonaLoader implements ApplicationRunner {
 
     private final PersonaRepository personaRepository;
 
-    private final List<Persona> personaList = Arrays.asList(
-            new Persona(1L, "lukas.hennig@gmx.de" ,"Hallo123!", "Lukas", "Hennig", LocalDate.of(1994, 1,25)),
-            new Persona(2L, "alicebseim@gmail.com", "Hallo123!", "Alice", "Seim",  LocalDate.of(1994, 12,9)));
+    private final List<Persona> personaList = Collections.singletonList(
+            Persona.builder()
+                    .email("lukas.hennig@gmx.de")
+                    .password("Hallo123!")
+                    .firstname("Lukas")
+                    .lastname("Hennig")
+                    .dayOfBirth(LocalDate.of(1994, 1, 25))
+                    .role(Role.ADMIN)
+                    .build());
 
     @Autowired
     public PersonaLoader(PersonaRepository personaRepository) {

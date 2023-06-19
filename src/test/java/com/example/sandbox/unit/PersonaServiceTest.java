@@ -2,7 +2,7 @@ package com.example.sandbox.unit;
 
 import com.example.sandbox.fixture.PersonaFixture;
 import com.example.sandbox.model.Persona;
-import com.example.sandbox.service.PersonaService;
+import com.example.sandbox.service.PersonaServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class PersonaServiceTest {
 
     @Autowired
-    private PersonaService personaService;
+    private PersonaServiceImpl personaService;
 
     @Test
     public void should_create_entry() {
