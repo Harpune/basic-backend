@@ -38,6 +38,14 @@ public class PersonaServiceImpl implements PersonaService {
     }
 
     @Override
+    public boolean existsById(Long id) {
+        if (id == null) {
+            throw new RuntimeException("ID must not be null");
+        }
+        return personaRepository.existsById(id);
+    }
+
+    @Override
     public Persona findOneByEmail(String email) {
         if (email == null) {
             throw new RuntimeException("Email must not be null");
@@ -102,10 +110,6 @@ public class PersonaServiceImpl implements PersonaService {
     @Override
     public void deleteAllByID(List<Long> idList) {
         personaRepository.deleteAllById(idList);
-    }
-
-    public boolean exists(Long id) {
-        return personaRepository.existsById(id);
     }
 
     @Override

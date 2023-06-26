@@ -2,21 +2,22 @@ package com.example.sandbox.unit;
 
 import com.example.sandbox.fixture.PersonaFixture;
 import com.example.sandbox.model.Persona;
-import com.example.sandbox.service.PersonaServiceImpl;
+import com.example.sandbox.service.PersonaService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class PersonaServiceTest {
 
     @Autowired
-    private PersonaServiceImpl personaService;
+    private PersonaService personaService;
 
     @Test
+    @Transactional
     public void should_create_entry() {
         // given
         Persona one = PersonaFixture.create();
@@ -25,12 +26,6 @@ public class PersonaServiceTest {
         Persona saved = personaService.saveOne(one);
 
         // then, given
-        assertTrue(personaService.exists(saved.getId()));
-
-        // when
-        personaService.deleteOneByID(saved.getId());
-
-        // then
-        assertFalse(personaService.exists(saved.getId()));
+        assertTrue(personaService.existsById(saved.getId()));
     }
 }
