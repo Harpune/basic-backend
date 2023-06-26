@@ -1,6 +1,6 @@
 package com.example.sandbox.mapper;
 
-import com.example.sandbox.dto.PersonaDTO;
+import com.example.sandbox.model.dto.PersonaDTO;
 import com.example.sandbox.model.Persona;
 import org.mapstruct.Mapper;
 

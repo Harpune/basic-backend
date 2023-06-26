@@ -1,11 +1,11 @@
 package com.example.sandbox.service;
 
-import com.example.sandbox.dto.JwtAuthenticationResponse;
-import com.example.sandbox.dto.SignUpRequest;
-import com.example.sandbox.dto.SigninRequest;
+import com.example.sandbox.model.dto.JwtAuthenticationResponse;
+import com.example.sandbox.model.dto.SignUpRequest;
+import com.example.sandbox.model.dto.SignInRequest;
 
 public interface AuthenticationService {
 
     JwtAuthenticationResponse signup(SignUpRequest request);
-    JwtAuthenticationResponse signin(SigninRequest request);
+    JwtAuthenticationResponse signin(SignInRequest request);
 }

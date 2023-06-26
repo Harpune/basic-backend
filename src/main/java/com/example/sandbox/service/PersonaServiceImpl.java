@@ -4,8 +4,6 @@ import com.example.sandbox.model.exception.ModelNotFoundException;
 import com.example.sandbox.model.Persona;
 import com.example.sandbox.repository.PersonaRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -16,7 +14,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class PersonaServiceImpl implements PersonaService, ModelService<Persona, Long> {
+public class PersonaServiceImpl implements PersonaService {
 
     private final PersonaRepository personaRepository;
 
@@ -27,7 +25,7 @@ public class PersonaServiceImpl implements PersonaService, ModelService<Persona,
 
     @Override
     public Persona findOneByID(Long id) {
-        if(id == null) {
+        if (id == null) {
             throw new RuntimeException("ID must not be null");
         }
         return personaRepository.findById(id).orElseThrow(() -> new ModelNotFoundException(Persona.class, String.valueOf(id)));
@@ -37,6 +35,22 @@ public class PersonaServiceImpl implements PersonaService, ModelService<Persona,
     public List<Persona> findAllByID(List<Long> idList) {
         idList.removeIf(Objects::isNull);
         return personaRepository.findAllById(idList);
+    }
+
+    @Override
+    public Persona findOneByEmail(String email) {
+        if (email == null) {
+            throw new RuntimeException("Email must not be null");
+        }
+        return personaRepository.findByEmail(email).orElseThrow(() -> new ModelNotFoundException(Persona.class, email));
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        if (email == null) {
+            throw new RuntimeException("Email must not be null");
+        }
+        return personaRepository.existsByEmail(email);
     }
 
     @Override
@@ -52,10 +66,23 @@ public class PersonaServiceImpl implements PersonaService, ModelService<Persona,
     @Override
     public Persona updateOneByID(Long id, Persona newPersona) {
         return personaRepository.findById(id).map(persona -> {
+            persona.setEmail(newPersona.getEmail());
+            persona.setPassword(newPersona.getPassword());
             persona.setFirstname(newPersona.getFirstname());
             persona.setLastname(newPersona.getLastname());
             persona.setDayOfBirth(newPersona.getDayOfBirth());
+            return personaRepository.save(persona);
+        }).orElseGet(() -> personaRepository.save(newPersona));
+    }
+
+    @Override
+    public Persona updateOneByEmail(String email, Persona newPersona) {
+        return personaRepository.findByEmail(email).map(persona -> {
             persona.setEmail(newPersona.getEmail());
+            persona.setPassword(newPersona.getPassword());
+            persona.setFirstname(newPersona.getFirstname());
+            persona.setLastname(newPersona.getLastname());
+            persona.setDayOfBirth(newPersona.getDayOfBirth());
             return personaRepository.save(persona);
         }).orElseGet(() -> personaRepository.save(newPersona));
     }

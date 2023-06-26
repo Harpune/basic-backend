@@ -24,16 +24,20 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final PersonaService personaService;
+
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
+        // Check if Bearer Token is present.
         final String authHeader = request.getHeader("Authorization");
         if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, "Bearer ")) {
+            // No Token present
             filterChain.doFilter(request, response);
             return;
         }
 
+        // Token is present
         final String jwt = authHeader.substring(7);
         final String userEmail= jwtService.extractUserName(jwt);
 

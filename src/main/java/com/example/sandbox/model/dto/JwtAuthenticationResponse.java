@@ -1,4 +1,4 @@
-package com.example.sandbox.dto;
+package com.example.sandbox.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

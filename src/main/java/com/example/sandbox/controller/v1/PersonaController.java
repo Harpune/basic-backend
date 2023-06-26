@@ -1,6 +1,6 @@
 package com.example.sandbox.controller.v1;
 
-import com.example.sandbox.dto.PersonaDTO;
+import com.example.sandbox.model.dto.PersonaDTO;
 import com.example.sandbox.mapper.PersonaMapper;
 import com.example.sandbox.model.Persona;
 import com.example.sandbox.service.PersonaServiceImpl;
